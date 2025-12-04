@@ -998,15 +998,22 @@
 
                 // 添加标注到地图 - 使用行业颜色区分不同类型的企业
                 companyMarkers.forEach(function(company) {
-                    // 创建带颜色的标注
+                    // 创建简单标注（不使用自定义SVG图标避免appendChild问题）
                     var marker = new AMap.Marker({
                         position: company.lnglat,
                         title: company.name,
-                        icon: new AMap.Icon({
-                            size: new AMap.Size(16, 16),
-                            image: 'data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="' + (industryColors[company.type] || '#666') + '" stroke="#fff" stroke-width="2"/></svg>',
-                            imageSize: new AMap.Size(16, 16)
-                        })
+                        // 使用默认图标，通过颜色区分不同行业
+                        label: {
+                            content: '',
+                            offset: new AMap.Pixel(-10, -10),
+                            style: {
+                                backgroundColor: industryColors[company.type] || '#666',
+                                width: '20px',
+                                height: '20px',
+                                borderRadius: '50%',
+                                border: '2px solid #fff'
+                            }
+                        }
                     });
 
                     // 创建信息窗口（使用HTML字符串避免DOM操作问题）
@@ -1030,25 +1037,36 @@
                 });
                 
                 // 添加图例
-                // 创建图例HTML字符串
-                var legendHTML = '<div style="background: white; padding: 10px; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">';
-                legendHTML += '<div style="font-weight: bold; margin-bottom: 5px;">行业图例</div>';
+                // 创建图例DOM元素
+                var legendDiv = document.createElement('div');
+                legendDiv.style.cssText = 'background: white; padding: 10px; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); position: absolute; bottom: 20px; left: 20px; z-index: 1000;';
+                
+                var titleDiv = document.createElement('div');
+                titleDiv.style.cssText = 'font-weight: bold; margin-bottom: 5px;';
+                titleDiv.textContent = '行业图例';
+                legendDiv.appendChild(titleDiv);
                 
                 for (var type in industryColors) {
                     if (industryColors.hasOwnProperty(type)) {
-                        legendHTML += '<div style="margin: 5px 0; display: flex; align-items: center;">';
-                        legendHTML += '<div style="width: 12px; height: 12px; border-radius: 50%; background: ' + industryColors[type] + '; margin-right: 5px;"></div>';
-                        legendHTML += '<span style="font-size: 12px;">' + type + '</span>';
-                        legendHTML += '</div>';
+                        var itemDiv = document.createElement('div');
+                        itemDiv.style.cssText = 'margin: 5px 0; display: flex; align-items: center;';
+                        
+                        var colorDiv = document.createElement('div');
+                        colorDiv.style.cssText = 'width: 12px; height: 12px; border-radius: 50%; background: ' + industryColors[type] + '; margin-right: 5px;';
+                        
+                        var textSpan = document.createElement('span');
+                        textSpan.style.cssText = 'font-size: 12px;';
+                        textSpan.textContent = type;
+                        
+                        itemDiv.appendChild(colorDiv);
+                        itemDiv.appendChild(textSpan);
+                        legendDiv.appendChild(itemDiv);
                     }
                 }
-                legendHTML += '</div>';
                 
-                var legend = new AMap.Control({
-                    position: 'LB',
-                    content: legendHTML
-                });
-                map.addControl(legend);
+                // 将图例添加到地图容器中
+                var mapContainer = document.getElementById('map-container');
+                mapContainer.appendChild(legendDiv);
 
                 // 添加核心集聚区标注 - 同样使用简化配置
                 var clusterMarkers = [
