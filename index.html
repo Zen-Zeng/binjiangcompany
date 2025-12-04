@@ -1017,13 +1017,11 @@
 
                     // 创建信息窗口
                     var infoWindow = new AMap.InfoWindow({
-                        content: `
-                            <div style="padding: 10px;">
-                                <h4 style="margin:0 0 5px 0;color:#333;">${company.name}</h4>
-                                <p style="margin:0 0 3px 0;font-size:12px;">地址：${company.address}</p>
-                                <p style="margin:0;font-size:12px;color:#666;">行业：${company.type}</p>
-                            </div>
-                        `
+                        content: '<div style="padding: 10px;">' +
+                                 '<h4 style="margin:0 0 5px 0;color:#333;">' + company.name + '</h4>' +
+                                 '<p style="margin:0 0 3px 0;font-size:12px;">地址：' + company.address + '</p>' +
+                                 '<p style="margin:0;font-size:12px;color:#666;">行业：' + company.type + '</p>' +
+                                 '</div>'
                     });
 
                     // 绑定点击事件
@@ -1071,12 +1069,10 @@
                     });
 
                     var infoWindow = new AMap.InfoWindow({
-                        content: `
-                            <div style="padding: 10px;">
-                                <h4 style="margin:0 0 5px 0;color:#333;">${cluster.name}</h4>
-                                <p style="margin:0;font-size:12px;">${cluster.desc}</p>
-                            </div>
-                        `
+                        content: '<div style="padding: 10px;">' +
+                                 '<h4 style="margin:0 0 5px 0;color:#333;">' + cluster.name + '</h4>' +
+                                 '<p style="margin:0;font-size:12px;">' + cluster.desc + '</p>' +
+                                 '</div>'
                     });
 
                     marker.on('click', function() {
@@ -1089,17 +1085,15 @@
                 // 捕获地图初始化过程中的任何错误
                 var mapContainer = document.getElementById('map-container');
                 if (mapContainer) {
-                    mapContainer.innerHTML = `
-                        <div class="flex items-center justify-center h-full bg-gray-50 rounded-lg">
-                            <div class="text-center p-8">
-                                <i class="fa-solid fa-map text-4xl text-gray-400 mb-4"></i>
-                                <h3 class="text-lg font-medium text-gray-700 mb-2">地图加载失败</h3>
-                                <p class="text-sm text-gray-500">地图初始化过程中发生错误：${error.message}</p>
-                                <p class="text-sm text-gray-500 mt-2">建议使用不带地图的简化版本查看</p>
-                                <a href="merged_no_map.html" class="text-blue-500 hover:underline mt-2 inline-block">查看简化版本</a>
-                            </div>
-                        </div>
-                    `;
+                    mapContainer.innerHTML = '<div class="flex items-center justify-center h-full bg-gray-50 rounded-lg">' +
+                                             '<div class="text-center p-8">' +
+                                             '<i class="fa-solid fa-map text-4xl text-gray-400 mb-4"></i>' +
+                                             '<h3 class="text-lg font-medium text-gray-700 mb-2">地图加载失败</h3>' +
+                                             '<p class="text-sm text-gray-500">地图初始化过程中发生错误：' + error.message + '</p>' +
+                                             '<p class="text-sm text-gray-500 mt-2">建议使用不带地图的简化版本查看</p>' +
+                                             '<a href="merged_no_map.html" class="text-blue-500 hover:underline mt-2 inline-block">查看简化版本</a>' +
+                                             '</div>' +
+                                             '</div>';
                 }
             }
         };
