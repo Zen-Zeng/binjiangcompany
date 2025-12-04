@@ -1032,23 +1032,46 @@
                 });
                 
                 // 添加图例
-                var legendContent = '<div style="background: white; padding: 10px; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">';
-                legendContent += '<div style="font-weight: bold; margin-bottom: 5px;">行业图例</div>';
+                // 创建图例DOM元素
+                var legendDiv = document.createElement('div');
+                legendDiv.style.background = 'white';
+                legendDiv.style.padding = '10px';
+                legendDiv.style.borderRadius = '4px';
+                legendDiv.style.boxShadow = '0 2px 6px rgba(0,0,0,0.1)';
+                
+                var legendTitle = document.createElement('div');
+                legendTitle.style.fontWeight = 'bold';
+                legendTitle.style.marginBottom = '5px';
+                legendTitle.textContent = '行业图例';
+                legendDiv.appendChild(legendTitle);
                 
                 for (var type in industryColors) {
                     if (industryColors.hasOwnProperty(type)) {
-                        legendContent += '<div style="margin: 5px 0; display: flex; align-items: center;">';
-                        legendContent += '<div style="width: 12px; height: 12px; border-radius: 50%; background: ' + industryColors[type] + '; margin-right: 5px;"></div>';
-                        legendContent += '<span style="font-size: 12px;">' + type + '</span>';
-                        legendContent += '</div>';
+                        var legendItem = document.createElement('div');
+                        legendItem.style.margin = '5px 0';
+                        legendItem.style.display = 'flex';
+                        legendItem.style.alignItems = 'center';
+                        
+                        var colorDot = document.createElement('div');
+                        colorDot.style.width = '12px';
+                        colorDot.style.height = '12px';
+                        colorDot.style.borderRadius = '50%';
+                        colorDot.style.background = industryColors[type];
+                        colorDot.style.marginRight = '5px';
+                        
+                        var typeText = document.createElement('span');
+                        typeText.style.fontSize = '12px';
+                        typeText.textContent = type;
+                        
+                        legendItem.appendChild(colorDot);
+                        legendItem.appendChild(typeText);
+                        legendDiv.appendChild(legendItem);
                     }
                 }
                 
-                legendContent += '</div>';
-                
                 var legend = new AMap.Control({
                     position: 'LB',
-                    content: legendContent
+                    content: legendDiv
                 });
                 map.addControl(legend);
 
