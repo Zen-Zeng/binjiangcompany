@@ -1014,12 +1014,31 @@
                     });
 
                     // 创建信息窗口
+                    var infoWindowContent = document.createElement('div');
+                    infoWindowContent.style.padding = '10px';
+                    
+                    var companyName = document.createElement('h4');
+                    companyName.style.margin = '0 0 5px 0';
+                    companyName.style.color = '#333';
+                    companyName.textContent = company.name;
+                    
+                    var companyAddress = document.createElement('p');
+                    companyAddress.style.margin = '0 0 3px 0';
+                    companyAddress.style.fontSize = '12px';
+                    companyAddress.textContent = '地址：' + company.address;
+                    
+                    var companyType = document.createElement('p');
+                    companyType.style.margin = '0';
+                    companyType.style.fontSize = '12px';
+                    companyType.style.color = '#666';
+                    companyType.textContent = '行业：' + company.type;
+                    
+                    infoWindowContent.appendChild(companyName);
+                    infoWindowContent.appendChild(companyAddress);
+                    infoWindowContent.appendChild(companyType);
+                    
                     var infoWindow = new AMap.InfoWindow({
-                        content: '<div style="padding: 10px;">' +
-                                 '<h4 style="margin:0 0 5px 0;color:#333;">' + company.name + '</h4>' +
-                                 '<p style="margin:0 0 3px 0;font-size:12px;">地址：' + company.address + '</p>' +
-                                 '<p style="margin:0;font-size:12px;color:#666;">行业：' + company.type + '</p>' +
-                                 '</div>'
+                        content: infoWindowContent
                     });
 
                     // 绑定点击事件
@@ -1089,11 +1108,25 @@
                         title: cluster.name
                     });
 
+                    // 创建信息窗口
+                    var clusterInfoContent = document.createElement('div');
+                    clusterInfoContent.style.padding = '10px';
+                    
+                    var clusterName = document.createElement('h4');
+                    clusterName.style.margin = '0 0 5px 0';
+                    clusterName.style.color = '#333';
+                    clusterName.textContent = cluster.name;
+                    
+                    var clusterDesc = document.createElement('p');
+                    clusterDesc.style.margin = '0';
+                    clusterDesc.style.fontSize = '12px';
+                    clusterDesc.textContent = cluster.desc;
+                    
+                    clusterInfoContent.appendChild(clusterName);
+                    clusterInfoContent.appendChild(clusterDesc);
+                    
                     var infoWindow = new AMap.InfoWindow({
-                        content: '<div style="padding: 10px;">' +
-                                 '<h4 style="margin:0 0 5px 0;color:#333;">' + cluster.name + '</h4>' +
-                                 '<p style="margin:0;font-size:12px;">' + cluster.desc + '</p>' +
-                                 '</div>'
+                        content: clusterInfoContent
                     });
 
                     marker.on('click', function() {
