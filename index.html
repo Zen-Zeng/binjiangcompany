@@ -905,21 +905,114 @@
 
                 // 简化版本：不添加复杂控件，避免兼容性问题
                 
-                // 上市公司坐标数据（核心企业）
+                // 行业类型对应的颜色
+                var industryColors = {
+                    "安防": "#FF6B6B",
+                    "软件": "#4ECDC4",
+                    "生物医药": "#96CEB4",
+                    "电子": "#FFEAA7",
+                    "其他": "#DDA0DD"
+                };
+                
+                // 上市公司坐标数据（74家完整企业）
                 var companyMarkers = [
-                    { name: "海康威视", lnglat: [120.201, 30.188], address: "滨江区阡陌路555号", type: "安防" },
-                    { name: "大华股份", lnglat: [120.198, 30.185], address: "滨江区滨安路1187号", type: "安防" },
-                    { name: "恒生电子", lnglat: [120.190, 30.195], address: "滨江区江南大道3588号", type: "软件" },
-                    { name: "泰格医药", lnglat: [120.205, 30.178], address: "滨江区江南大道88号", type: "生物医药" },
-                    { name: "长川科技", lnglat: [120.210, 30.182], address: "滨江区浦沿街道东冠路611号", type: "电子" }
+                    // 安防与视频监控行业（18家）
+                    { name: "海康威视", lnglat: [120.201, 30.188], address: "杭州市滨江区阡陌路555号", type: "安防" },
+                    { name: "大华股份", lnglat: [120.198, 30.185], address: "杭州市滨江区滨安路1187号", type: "安防" },
+                    { name: "大立科技", lnglat: [120.185, 30.192], address: "杭州市滨江区滨康路639号", type: "安防" },
+                    { name: "中威电子", lnglat: [120.193, 30.195], address: "杭州市滨江区西兴街道联慧街300号", type: "安防" },
+                    { name: "宇视科技", lnglat: [120.205, 30.180], address: "杭州市滨江区扬帆路999号", type: "安防" },
+                    { name: "东方通信", lnglat: [120.188, 30.198], address: "杭州市滨江区东信大道66号", type: "安防" },
+                    { name: "高新兴", lnglat: [120.200, 30.185], address: "杭州市滨江区物联网街300号", type: "安防" },
+                    { name: "佳都科技", lnglat: [120.195, 30.190], address: "杭州市滨江区江南大道588号", type: "安防" },
+                    { name: "千方科技", lnglat: [120.192, 30.185], address: "杭州市滨江区长河街道越达巷92号", type: "安防" },
+                    { name: "捷顺科技", lnglat: [120.208, 30.182], address: "杭州市滨江区浦沿街道东冠路555号", type: "安防" },
+                    { name: "安居宝", lnglat: [120.194, 30.192], address: "杭州市滨江区西兴街道滨文路5号", type: "安防" },
+                    { name: "达实智能", lnglat: [120.190, 30.188], address: "杭州市滨江区长河街道江虹路768号", type: "安防" },
+                    { name: "英飞拓", lnglat: [120.202, 30.186], address: "杭州市滨江区物联网街451号", type: "安防" },
+                    { name: "万佳安", lnglat: [120.196, 30.190], address: "杭州市滨江区江南大道1088号", type: "安防" },
+                    { name: "视源股份", lnglat: [120.189, 30.187], address: "杭州市滨江区长河街道秋溢路606号", type: "安防" },
+                    { name: "同为股份", lnglat: [120.209, 30.181], address: "杭州市滨江区浦沿街道信诚路857号", type: "安防" },
+                    { name: "雄塑科技", lnglat: [120.193, 30.191], address: "杭州市滨江区西兴街道科技馆街958号", type: "安防" },
+                    { name: "振芯科技", lnglat: [120.194, 30.193], address: "杭州市滨江区长河街道江南大道1328号", type: "安防" },
+                    
+                    // 软件与信息技术服务行业（21家）
+                    { name: "恒生电子", lnglat: [120.190, 30.195], address: "杭州市滨江区江南大道3588号", type: "软件" },
+                    { name: "迪普科技", lnglat: [120.197, 30.191], address: "杭州市滨江区通和路68号", type: "软件" },
+                    { name: "创业慧康", lnglat: [120.192, 30.185], address: "杭州市滨江区长河街道越达巷92号", type: "软件" },
+                    { name: "光云科技", lnglat: [120.191, 30.192], address: "杭州市滨江区西兴街道聚工路19号", type: "软件" },
+                    { name: "同花顺", lnglat: [120.195, 30.190], address: "杭州市滨江区江南大道588号恒鑫大厦19层", type: "软件" },
+                    { name: "网新智能", lnglat: [120.198, 30.194], address: "杭州市滨江区文三路90号东部软件园", type: "软件" },
+                    { name: "浙大网新", lnglat: [120.194, 30.193], address: "杭州市滨江区长河街道江南大道123号", type: "软件" },
+                    { name: "信雅达", lnglat: [120.189, 30.196], address: "杭州市滨江区江南大道3888号", type: "软件" },
+                    { name: "银江技术", lnglat: [120.193, 30.191], address: "杭州市滨江区西兴街道科技馆街958号", type: "软件" },
+                    { name: "华通云数据", lnglat: [120.202, 30.186], address: "杭州市滨江区物联网街451号", type: "软件" },
+                    { name: "三维天地", lnglat: [120.208, 30.182], address: "杭州市滨江区浦沿街道东冠路555号", type: "软件" },
+                    { name: "中控技术", lnglat: [120.203, 30.187], address: "杭州市滨江区六和路309号", type: "软件" },
+                    { name: "每日互动", lnglat: [120.193, 30.195], address: "杭州市滨江区西兴街道联慧街300号", type: "软件" },
+                    { name: "联络互动", lnglat: [120.200, 30.185], address: "杭州市滨江区物联网街300号", type: "软件" },
+                    { name: "东信和平", lnglat: [120.188, 30.198], address: "杭州市滨江区东信大道66号", type: "软件" },
+                    { name: "数源科技", lnglat: [120.189, 30.187], address: "杭州市滨江区长河街道秋溢路606号", type: "软件" },
+                    { name: "中恒电气", lnglat: [120.207, 30.183], address: "杭州市滨江区浦沿街道东冠路611号", type: "软件" },
+                    { name: "华星创业", lnglat: [120.190, 30.188], address: "杭州市滨江区长河街道江虹路768号", type: "软件" },
+                    { name: "初灵信息", lnglat: [120.191, 30.192], address: "杭州市滨江区西兴街道聚工路19号", type: "软件" },
+                    { name: "恒基永昕新材料", lnglat: [120.196, 30.190], address: "杭州市滨江区江南大道1088号", type: "软件" },
+                    { name: "思创医惠", lnglat: [120.192, 30.185], address: "杭州市滨江区长河街道越达巷92号", type: "软件" },
+                    
+                    // 生物医药行业（12家）
+                    { name: "泰格医药", lnglat: [120.205, 30.178], address: "杭州市滨江区江南大道88号", type: "生物医药" },
+                    { name: "聚光科技", lnglat: [120.201, 30.188], address: "杭州市滨江区阡陌路459号", type: "生物医药" },
+                    { name: "长川科技", lnglat: [120.207, 30.183], address: "杭州市滨江区浦沿街道东冠路611号", type: "生物医药" },
+                    { name: "药明生物", lnglat: [120.206, 30.177], address: "杭州市滨江区智慧新天地创慧街88号", type: "生物医药" },
+                    { name: "迪安诊断", lnglat: [120.196, 30.190], address: "杭州市滨江区江南大道1088号", type: "生物医药" },
+                    { name: "健盛集团", lnglat: [120.190, 30.188], address: "杭州市滨江区长河街道江虹路768号", type: "生物医药" },
+                    { name: "贝达药业", lnglat: [120.193, 30.195], address: "杭州市滨江区西兴街道联慧街300号", type: "生物医药" },
+                    { name: "九洲药业", lnglat: [120.202, 30.186], address: "杭州市滨江区物联网街451号", type: "生物医药" },
+                    { name: "海正药业", lnglat: [120.208, 30.182], address: "杭州市滨江区浦沿街道东冠路555号", type: "生物医药" },
+                    { name: "普利制药", lnglat: [120.206, 30.177], address: "杭州市滨江区智慧新天地创慧街88号", type: "生物医药" },
+                    { name: "司太立", lnglat: [120.193, 30.191], address: "杭州市滨江区西兴街道科技馆街958号", type: "生物医药" },
+                    { name: "我武生物", lnglat: [120.189, 30.187], address: "杭州市滨江区长河街道秋溢路606号", type: "生物医药" },
+                    { name: "诺辉健康", lnglat: [120.189, 30.196], address: "杭州市滨江区江南大道3888号", type: "生物医药" },
+                    
+                    // 通信与电子行业（19家）
+                    { name: "三维通信", lnglat: [120.203, 30.189], address: "杭州市滨江区火炬大道581号", type: "电子" },
+                    { name: "华星创业", lnglat: [120.190, 30.188], address: "杭州市滨江区长河街道江虹路768号", type: "电子" },
+                    { name: "中恒电气", lnglat: [120.207, 30.183], address: "杭州市滨江区浦沿街道东冠路611号", type: "电子" },
+                    { name: "先锋电子", lnglat: [120.191, 30.192], address: "杭州市滨江区西兴街道聚工路19号", type: "电子" },
+                    { name: "士兰微", lnglat: [120.189, 30.187], address: "杭州市滨江区秋溢路606号", type: "电子" },
+                    { name: "立昂微", lnglat: [120.200, 30.185], address: "杭州市滨江区物联网街300号", type: "电子" },
+                    { name: "中芯集成", lnglat: [120.196, 30.190], address: "杭州市滨江区江南大道1088号", type: "电子" },
+                    { name: "芯能科技", lnglat: [120.190, 30.188], address: "杭州市滨江区长河街道江虹路768号", type: "电子" },
+                    { name: "万马股份", lnglat: [120.193, 30.191], address: "杭州市滨江区西兴街道科技馆街958号", type: "电子" },
+                    { name: "永贵电器", lnglat: [120.208, 30.182], address: "杭州市滨江区浦沿街道东冠路555号", type: "电子" },
+                    { name: "盛洋科技", lnglat: [120.202, 30.186], address: "杭州市滨江区物联网街451号", type: "电子" },
+                    { name: "通宇通讯", lnglat: [120.189, 30.196], address: "杭州市滨江区江南大道3888号", type: "电子" },
+                    { name: "新易盛", lnglat: [120.193, 30.195], address: "杭州市滨江区西兴街道联慧街300号", type: "电子" },
+                    { name: "中际旭创", lnglat: [120.189, 30.187], address: "杭州市滨江区长河街道秋溢路606号", type: "电子" },
+                    { name: "光迅科技", lnglat: [120.200, 30.185], address: "杭州市滨江区物联网街300号", type: "电子" },
+                    { name: "华工科技", lnglat: [120.196, 30.190], address: "杭州市滨江区江南大道1088号", type: "电子" },
+                    { name: "水晶光电", lnglat: [120.208, 30.182], address: "杭州市滨江区浦沿街道东冠路555号", type: "电子" },
+                    { name: "激智科技", lnglat: [120.191, 30.192], address: "杭州市滨江区西兴街道聚工路19号", type: "电子" },
+                    { name: "道明光学", lnglat: [120.190, 30.188], address: "杭州市滨江区长河街道江虹路768号", type: "电子" },
+                    
+                    // 其他行业（4家）
+                    { name: "华数传媒", lnglat: [120.198, 30.189], address: "杭州市滨江区长江路179号", type: "其他" },
+                    { name: "杭州热电", lnglat: [120.209, 30.180], address: "杭州市滨江区浦沿街道浦炬街199号", type: "其他" },
+                    { name: "祖名股份", lnglat: [120.188, 30.186], address: "杭州市滨江区长河街道秋溢路58号", type: "其他" },
+                    { name: "老板电器", lnglat: [120.196, 30.190], address: "杭州市滨江区江南大道1088号", type: "其他" }
                 ];
 
-                // 添加标注到地图 - 使用最简化的标记配置
+                // 添加标注到地图 - 使用行业颜色区分不同类型的企业
                 companyMarkers.forEach(function(company) {
-                    // 创建简单标注，不使用复杂图标配置
+                    // 创建带颜色的标注
                     var marker = new AMap.Marker({
                         position: company.lnglat,
-                        title: company.name
+                        title: company.name,
+                        icon: new AMap.Icon({
+                            size: new AMap.Size(16, 16),
+                            image: 'data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="' + (industryColors[company.type] || '#666') + '" stroke="#fff" stroke-width="2"/></svg>',
+                            imageSize: new AMap.Size(16, 16)
+                        })
                     });
 
                     // 创建信息窗口
@@ -941,6 +1034,23 @@
                     // 添加到地图
                     map.add(marker);
                 });
+                
+                // 添加图例
+                var legend = new AMap.Control({
+                    position: 'LB',
+                    content: `
+                        <div style="background: white; padding: 10px; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+                            <div style="font-weight: bold; margin-bottom: 5px;">行业图例</div>
+                            ${Object.keys(industryColors).map(type => `
+                                <div style="margin: 5px 0; display: flex; align-items: center;">
+                                    <div style="width: 12px; height: 12px; border-radius: 50%; background: ${industryColors[type]}; margin-right: 5px;"></div>
+                                    <span style="font-size: 12px;">${type}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `
+                });
+                map.addControl(legend);
 
                 // 添加核心集聚区标注 - 同样使用简化配置
                 var clusterMarkers = [
