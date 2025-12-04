@@ -1036,19 +1036,23 @@
                 });
                 
                 // 添加图例
+                var legendContent = '<div style="background: white; padding: 10px; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">';
+                legendContent += '<div style="font-weight: bold; margin-bottom: 5px;">行业图例</div>';
+                
+                for (var type in industryColors) {
+                    if (industryColors.hasOwnProperty(type)) {
+                        legendContent += '<div style="margin: 5px 0; display: flex; align-items: center;">';
+                        legendContent += '<div style="width: 12px; height: 12px; border-radius: 50%; background: ' + industryColors[type] + '; margin-right: 5px;"></div>';
+                        legendContent += '<span style="font-size: 12px;">' + type + '</span>';
+                        legendContent += '</div>';
+                    }
+                }
+                
+                legendContent += '</div>';
+                
                 var legend = new AMap.Control({
                     position: 'LB',
-                    content: `
-                        <div style="background: white; padding: 10px; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
-                            <div style="font-weight: bold; margin-bottom: 5px;">行业图例</div>
-                            ${Object.keys(industryColors).map(type => `
-                                <div style="margin: 5px 0; display: flex; align-items: center;">
-                                    <div style="width: 12px; height: 12px; border-radius: 50%; background: ${industryColors[type]}; margin-right: 5px;"></div>
-                                    <span style="font-size: 12px;">${type}</span>
-                                </div>
-                            `).join('')}
-                        </div>
-                    `
+                    content: legendContent
                 });
                 map.addControl(legend);
 
