@@ -875,7 +875,7 @@
             }
         });
 
-        // 初始化高德地图（根据高德API文档使用AMap.ready确保API完全加载）
+        // 初始化高德地图
         if (typeof AMap === 'undefined') {
             // 如果AMap未定义，显示提示信息
             var mapContainer = document.getElementById('map-container');
@@ -889,9 +889,8 @@
                                          '</div>';
             }
         } else {
-            AMap.ready(function() {
-                try {
-                // 初始化地图
+            try {
+                // 直接初始化地图，因为AMap对象已存在
                 var map = new AMap.Map('map-container', {
                     zoom: 13, // 初始缩放级别
                     center: [120.195, 30.190], // 滨江区中心点坐标
@@ -1146,8 +1145,7 @@
                                              '</div>' +
                                              '</div>';
                 }
-                }
-            });
+            }
         }
     </script>
 </body>
